@@ -154,6 +154,46 @@ public class Minimax implements ISolver{
         }
         
         private int eval(State s){
-                //to be implemented
+          int eval = 0;
+
+          final int MAX = 1;
+          final int MIN = 2;
+          int countingForPlayer = 0;
+          int currentCount = 0;
+
+          int[][] gameBoard = s.gameBoard;
+
+          // horizontal (rows)
+          for (int i = 0; i < gameBoard.length; i++) {
+            for (int j = 0; j < gameBoard[0].length; j++) {
+
+              // max piece
+              if (gameBoard[i][j] == MAX) {
+                if (countingForPlayer == MAX) {
+                  currentCount++;
+                } else {
+
+                  // reset currentCount, set countingForPlayer == MIN and add to eval
+                  if (currentCount > 1) {
+                    eval += currentCount;
+
+                    //
+                  }
+                  currentCount = 1;
+
+                  countingForPlayer = MIN;
+                }
+              }
+
+              // min piece
+              if (gameBoard[i][j] == MIN) {
+                if (countingForPlayer == MIN) {
+                  currentCount++;
+                }
+              }
+            }
+          }
+
+          return eval;
         }
 }
