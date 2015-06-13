@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class Minimax implements ISolver{
         private int cutoffdepth, transTblCutoffDepth;
@@ -9,7 +10,10 @@ public class Minimax implements ISolver{
         private HashMap<State, Integer> transTbl = new HashMap<State, Integer>(100000);
         private static int hitCounter = 0, count = 0;
         private GameLogic gameLogic;
+    private Random random;
     private SeqFabian seq;
+
+    public int runs = 100;
 
     private enum CutoffActions {finalState, cutoff, playOn}
         private final int winSymbol = Integer.MAX_VALUE - 1;
@@ -23,6 +27,7 @@ public class Minimax implements ISolver{
                 seq = new SeqFabian();
                 this.cutoffdepth = d;
                 this.transTblCutoffDepth = d;
+                this.random = new Random(System.currentTimeMillis());
         }
         
         public int getDecision(State s){
@@ -117,7 +122,7 @@ public class Minimax implements ISolver{
                                 else if (utility == opponentID) return lossSymbol;
                                 else return -1000  ;
                         }
-                        else if (action == CutoffActions.cutoff) return evalFabian(s);
+                        else if (action == CutoffActions.cutoff) return evalMonteCarloFabian(s);
                 }
 
                 int v = Integer.MAX_VALUE;
@@ -265,6 +270,30 @@ public class Minimax implements ISolver{
         }
 
         return sumOwn - sumOpponent;
+    }
+
+    private int evalMonteCarloFabian(State s) {
+        int wins = 0;
+
+        for (int run = 0; run < runs; run++) {
+            State simState = new State(s);
+
+            int result;
+            int player = playerID;
+            while ((result = gameLogic.TerminalTest(simState)) == 0) {
+                int colNumber = random.nextInt(simState.openCols.size());
+                simState.insertCoin(simState.openCols.get(colNumber), player);
+                player = player == playerID ? opponentID : playerID;
+            }
+            if (result == playerID) {
+                wins++;
+            } else if (result == opponentID) {
+                wins--;
+            }
+
+        }
+
+        return wins;
     }
 
     private class SeqFabian {
