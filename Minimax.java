@@ -16,7 +16,7 @@ public class Minimax implements ISolver{
                 this.playerID = playerID;
                 this.opponentID = opponentID;
                 this.gameLogic = gameLogic;
-                seq = new Seq(playerID, opponentID);
+//                seq = new Seq(playerID, opponentID);
                 this.cutoffdepth = d;
                 this.transTblCutoffDepth = d;
         }
