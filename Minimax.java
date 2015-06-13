@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Minimax implements ISolver{
         private int cutoffdepth, transTblCutoffDepth;
@@ -7,7 +9,9 @@ public class Minimax implements ISolver{
         private HashMap<State, Integer> transTbl = new HashMap<State, Integer>(100000);
         private static int hitCounter = 0, count = 0;
         private GameLogic gameLogic;
-        private enum CutoffActions {finalState, cutoff, playOn}
+    private SeqFabian seq;
+
+    private enum CutoffActions {finalState, cutoff, playOn}
         private final int winSymbol = Integer.MAX_VALUE - 1;
         private final int lossSymbol = Integer.MIN_VALUE + 1;
         private boolean firstMove = true;
@@ -16,7 +20,7 @@ public class Minimax implements ISolver{
                 this.playerID = playerID;
                 this.opponentID = opponentID;
                 this.gameLogic = gameLogic;
-//                seq = new Seq(playerID, opponentID);
+                seq = new SeqFabian();
                 this.cutoffdepth = d;
                 this.transTblCutoffDepth = d;
         }
@@ -113,7 +117,7 @@ public class Minimax implements ISolver{
                                 else if (utility == opponentID) return lossSymbol;
                                 else return -1000  ;
                         }
-                        else if (action == CutoffActions.cutoff) return eval(s);
+                        else if (action == CutoffActions.cutoff) return evalFabian(s);
                 }
 
                 int v = Integer.MAX_VALUE;
@@ -126,7 +130,7 @@ public class Minimax implements ISolver{
                                 val = transTbl.get(sPrime);
                                 hitCounter++;
                         } else {
-                                val = MaxValue(sPrime, alpha, beta, depth+1);
+                                val = MaxValue(sPrime, alpha, beta, depth + 1);
                                 if (depth < transTblCutoffDepth && (val == winSymbol || val == lossSymbol) ) transTbl.put(sPrime, val);
                         }
                         
@@ -196,4 +200,132 @@ public class Minimax implements ISolver{
 
           return eval;
         }
+
+
+    private int evalFabian(State s) {
+        int sumOwn = 0, sumOpponent = 0;
+
+        //Rows
+        for (int[] rows : s.gameBoard) {
+            seq.push(rows);
+            sumOwn += seq.eval(playerID);
+            if (sumOwn == Integer.MAX_VALUE) {
+                return sumOwn;
+            }
+
+            sumOpponent += seq.eval(opponentID);
+            seq.flush();
+        }
+
+        //Columns
+        for (int col = 0; col < s.gameBoard[0].length; col++) {
+            for (int[] row : s.gameBoard) {
+                seq.push(row[col]);
+            }
+            sumOwn += seq.eval(playerID);
+            if (sumOwn == Integer.MAX_VALUE) {
+                return sumOwn;
+            }
+            sumOpponent += seq.eval(opponentID);
+            seq.flush();
+        }
+
+        //Diagonals right/up
+        for (int k = 3; k < s.gameBoard.length + s.gameBoard[0].length - 4; k++) {
+            for (int j = 0; j <= k; j++) {
+                int i = k - j;
+                if (i < s.gameBoard.length && j < s.gameBoard[i].length) {
+                    seq.push(s.gameBoard[i][j]);
+                }
+            }
+
+            sumOwn += seq.eval(playerID);
+            if (sumOwn == Integer.MAX_VALUE) {
+                return sumOwn;
+            }
+            sumOpponent += seq.eval(opponentID);
+            seq.flush();
+        }
+
+        //Diagonals right/down
+        for (int k = 3; k < s.gameBoard.length + s.gameBoard[0].length - 4; k++) {
+            for (int j = 0; j <= k; j++) {
+                int i = k - j;
+                if (i < s.gameBoard.length && j < s.gameBoard[i].length) {
+                    seq.push(s.gameBoard[i][s.gameBoard[i].length - j - 1]);
+                }
+            }
+
+            sumOwn += seq.eval(playerID);
+            if (sumOwn == Integer.MAX_VALUE) {
+                return sumOwn;
+            }
+            sumOpponent += seq.eval(opponentID);
+            seq.flush();
+        }
+
+        return sumOwn - sumOpponent;
+    }
+
+    private class SeqFabian {
+
+        List<Integer> sequence = new ArrayList<Integer>(7);
+
+        public void push(int field) {
+            sequence.add(field);
+        }
+
+        public void push(int... fields) {
+            for (int i : fields) {
+                sequence.add(i);
+            }
+        }
+
+        public void flush() {
+            sequence.clear();
+        }
+
+        public int eval(int playerId) {
+            int sum = 0;
+            boolean open = false;
+            int length = 0;
+
+            for (Integer field : sequence) {
+                if (field == 0) {
+                    sum = weigth(length, sum);
+                    open = true;
+                    length = 0;
+                } else if (field == playerId) {
+                    length++;
+                } else {
+                    length = 0;
+                    open = false;
+                }
+            }
+            if (open) {
+                sum = weigth(length, sum);
+            }
+
+            return sum;
+        }
+
+
+        public int weigth(int length, int sum) {
+            switch (length) {
+                case 4:
+                    //Should not be accessed
+                    sum = Integer.MAX_VALUE;
+                    break;
+                case 3:
+                    sum += 3;
+                    break;
+                case 2:
+                    sum += 1;
+                    break;
+                default:
+                    break;
+            }
+            return sum;
+        }
+    }
 }
