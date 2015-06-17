@@ -92,7 +92,7 @@ public class Minimax implements ISolver{
                                 else if (utility == opponentID) return lossSymbol;
                                 else return -1000;
                         }
-                        else if (action == CutoffActions.cutoff) return eval(s);
+                        else if (action == CutoffActions.cutoff) return evalVerena(s);
                 }
                 
                 int v = Integer.MIN_VALUE;
@@ -129,7 +129,7 @@ public class Minimax implements ISolver{
                                 else if (utility == opponentID) return lossSymbol;
                                 else return -1000  ;
                         }
-                        else if (action == CutoffActions.cutoff) return evalMonteCarloFabian(s);
+                        else if (action == CutoffActions.cutoff) return evalVerena(s);
                 }
 
                 int v = Integer.MAX_VALUE;
@@ -169,7 +169,7 @@ public class Minimax implements ISolver{
                 return CutoffActions.playOn;
         }
 
-  private int eval(State s){
+  private int evalVerena(State s){
     int eval = 0;
 
     int[][] gameBoard = s.gameBoard;
