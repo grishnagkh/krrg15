@@ -1,10 +1,10 @@
-public class Seq {
+public class SeqVerena {
   private int playerID;
   private int opponentID;
   private int currentCount;
   private int countingForPlayer;
 
-  public Seq(int playerID, int opponentID) {
+  public SeqVerena(int playerID, int opponentID) {
     this.playerID = playerID;
     this.opponentID = opponentID;
     this.currentCount = 0;
