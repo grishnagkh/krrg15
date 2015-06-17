@@ -17,8 +17,7 @@ public class Minimax implements ISolver{
 
         private Random random = new Random();
         private SeqFabian seq;
-        
-        private SeqVerena seqVerena;
+
         private int quadLength;
         private int excessRows;
         private int excessCols;
@@ -92,7 +91,7 @@ public class Minimax implements ISolver{
                                 else if (utility == opponentID) return lossSymbol;
                                 else return -1000;
                         }
-                        else if (action == CutoffActions.cutoff) return evalMonteCarloVerena(s);
+                        else if (action == CutoffActions.cutoff) return evalVerena(s);
                 }
                 
                 int v = Integer.MIN_VALUE;
@@ -129,7 +128,7 @@ public class Minimax implements ISolver{
                                 else if (utility == opponentID) return lossSymbol;
                                 else return -1000  ;
                         }
-                        else if (action == CutoffActions.cutoff) return evalMonteCarloVerena(s);
+                        else if (action == CutoffActions.cutoff) return evalVerena(s);
                 }
 
                 int v = Integer.MAX_VALUE;
@@ -170,130 +169,74 @@ public class Minimax implements ISolver{
         }
 
   private int evalVerena(State s){
-    int eval = 0;
 
     int[][] gameBoard = s.gameBoard;
     int[][] gameBoardMirrored = mirror(s.gameBoard);
 
-    seqVerena = new SeqVerena(playerID, opponentID);
+    SeqVerena seqVerena = new SeqVerena(playerID, opponentID);
 
     // vertical (columns)
     for (int i = 0; i < gameBoard.length; i++) {
       for (int j = 0; j < gameBoard[0].length; j++) {
-        int seqResult = seqVerena.evalPiece(gameBoard[i][j]);
-
-        // terminal test
-        if (seqResult == Integer.MAX_VALUE || seqResult == Integer.MIN_VALUE) {
-          return seqResult;
-        }
-        eval += seqResult;
+        seqVerena.evalPiece(gameBoard[i][j]);
       }
-      eval += seqVerena.reset();
+      seqVerena.reset();
     }
-    eval += seqVerena.reset();
+    seqVerena.reset();
 
     // horizontal (rows)
-    for (int i = 0; i < gameBoard[0].length; i++) {
-      for (int j = 0; j < gameBoard.length; j++) {
-        int seqResult = seqVerena.evalPiece(gameBoard[j][i]);
-
-        // terminal test
-        if (seqResult == Integer.MAX_VALUE || seqResult == Integer.MIN_VALUE) {
-          return seqResult;
+    if (!seqVerena.isFinishedState()) {
+      for (int i = 0; i < gameBoard[0].length; i++) {
+        for (int j = 0; j < gameBoard.length; j++) {
+          seqVerena.evalPiece(gameBoard[j][i]);
         }
-        eval += seqResult;
+        seqVerena.reset();
       }
-      eval += seqVerena.reset();
+      seqVerena.reset();
     }
-    eval += seqVerena.reset();
 
     // diagonal (top left to bottom right)
-
-    // iterate vertically / handle excessRows
-    int diagLength = 1;
-    for (int i = 0; i < quadLength + excessRows; i++) {
-      for (int j = 0; j < diagLength; j++) {
-        int seqResult = seqVerena.evalPiece(gameBoard[j][i-j]);
-
-        // terminal test
-        if (seqResult == Integer.MAX_VALUE || seqResult == Integer.MIN_VALUE) {
-          return seqResult;
-        }
-        eval += seqResult;
-      }
-      eval += seqVerena.reset();
-
-      if (diagLength < quadLength) {
-        diagLength++;
-      }
-    }
-    eval += seqVerena.reset();
-
-    // iterate horizontally / handle excessCols
-    diagLength = quadLength;
-    for (int i = 1; i < quadLength + excessCols; i++) {
-      for (int j = 0; j < diagLength; j++) {
-        int seqResult = seqVerena.evalPiece(gameBoard[j + i][quadLength - 1 - j]);
-
-        // terminal test
-        if (seqResult == Integer.MAX_VALUE || seqResult == Integer.MIN_VALUE) {
-          return seqResult;
-        }
-        eval += seqResult;
-      }
-      eval += seqVerena.reset();
-
-      // last triangle where diagLength is reducing to 1
-      if (i >= gameBoard[0].length - quadLength) {
-        diagLength--;
-      }
-    }
-    eval += seqVerena.reset();
+    diagonalEvalPiece(seqVerena, gameBoard);
 
     // diagonal (bottom left to top right) - use mirrored gameboard
+    diagonalEvalPiece(seqVerena, gameBoardMirrored);
 
-    // iterate vertically  / handle excessRows
-    diagLength = 1;
-    for (int i = 0; i < quadLength + excessRows; i++) {
-      for (int j = 0; j < diagLength; j++) {
-        int seqResult = seqVerena.evalPiece(gameBoardMirrored[j][i-j]);
+    return seqVerena.getResult();
+  }
 
-        // terminal test
-        if (seqResult == Integer.MAX_VALUE || seqResult == Integer.MIN_VALUE) {
-          return seqResult;
+  private void diagonalEvalPiece(SeqVerena seqVerena, int[][] gameBoard) {
+    int diagLength = 1;
+
+    if (!seqVerena.isFinishedState()) {
+
+      // iterate vertically / handle excessRows
+      for (int i = 0; i < quadLength + excessRows; i++) {
+        for (int j = 0; j < diagLength; j++) {
+          seqVerena.evalPiece(gameBoard[j][i - j]);
         }
-        eval += seqResult;
-      }
-      eval += seqVerena.reset();
+        seqVerena.reset();
 
-      if (diagLength < quadLength) {
-        diagLength++;
-      }
-    }
-    eval += seqVerena.reset();
-
-    // iterate horizontally / handle excessCols
-    diagLength = quadLength;
-    for (int i = 1; i < quadLength + excessCols; i++) {
-      for (int j = 0; j < diagLength; j++) {
-        int seqResult = seqVerena.evalPiece(gameBoardMirrored[j + i][quadLength - 1 - j]);
-
-        // terminal test
-        if (seqResult == Integer.MAX_VALUE || seqResult == Integer.MIN_VALUE) {
-          return seqResult;
+        if (diagLength < quadLength) {
+          diagLength++;
         }
-        eval += seqResult;
       }
-      eval += seqVerena.reset();
+      seqVerena.reset();
 
-      // last triangle where diagLength is reducing to 1
-      if (i >= gameBoardMirrored[0].length - quadLength) {
-        diagLength--;
+      // iterate horizontally / handle excessCols
+      diagLength = quadLength;
+      for (int i = 1; i < quadLength + excessCols; i++) {
+        for (int j = 0; j < diagLength; j++) {
+          seqVerena.evalPiece(gameBoard[j + i][quadLength - 1 - j]);
+        }
+        seqVerena.reset();
+
+        // last triangle where diagLength is reducing to 1
+        if (i >= gameBoard[0].length - quadLength) {
+          diagLength--;
+        }
       }
+      seqVerena.reset();
     }
-    eval += seqVerena.reset();
-
-    return eval;
   }
 
   private int[][] mirror(int[][] gameBoard) {

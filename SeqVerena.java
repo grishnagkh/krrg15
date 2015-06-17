@@ -3,6 +3,7 @@ public class SeqVerena {
   private int opponentID;
   private int currentCount;
   private int countingForPlayer;
+  private int result;
 
   public SeqVerena(int playerID, int opponentID) {
     this.playerID = playerID;
@@ -10,15 +11,15 @@ public class SeqVerena {
     this.currentCount = 0;
   }
 
-  public int evalPiece(int piece) {
-    int ret = 0;
+  public void evalPiece(int piece) {
+    int val = 0;
 
     // no piece
     if (piece == 0) {
 
       // reset current count
       if (currentCount > 1) {
-        ret = currentCount;
+        val = currentCount;
       }
 
       currentCount = 0;
@@ -32,13 +33,13 @@ public class SeqVerena {
 
         // for terminal test
         if (currentCount >= 4) {
-          ret = Integer.MAX_VALUE;
+          val = Integer.MAX_VALUE;
         }
       } else {
 
         // add current count to eval, set countingForPlayer == opponentID and reset currentCount
         if (currentCount > 1) {
-          ret = currentCount;
+          val = currentCount;
         }
 
         currentCount = 1;
@@ -53,13 +54,13 @@ public class SeqVerena {
 
         // for terminal test
         if (currentCount >= 4) {
-          ret = Integer.MIN_VALUE;
+          val = Integer.MIN_VALUE;
         }
       } else {
 
         // add current count to eval, set countingForPlayer == playerID and reset currentCount
         if (currentCount > 1) {
-          ret = -1 * currentCount;
+          val = -1 * currentCount;
         }
 
         currentCount = 1;
@@ -67,23 +68,42 @@ public class SeqVerena {
       }
     }
 
-    return ret;
+    addToResult(val);
   }
 
-  private int evalLastPiece() {
-    if (currentCount > 1) {
-      if (countingForPlayer == playerID) {
-        return currentCount;
+  private void addToResult(int val) {
+    // terminal test
+    if (!isFinishedState()) {
+      if (val != Integer.MAX_VALUE && val != Integer.MIN_VALUE) {
+        result += val;
       } else {
-        return -1 * currentCount;
+        result = val;
       }
     }
-    return 0;
   }
 
-  public int reset() {
-    int ret = evalLastPiece();
+  private void evalLastPiece() {
+    int val = 0;
+    if (currentCount > 1) {
+      if (countingForPlayer == playerID) {
+        val = currentCount;
+      } else {
+        val =  -1 * currentCount;
+      }
+    }
+    addToResult(val);
+  }
+
+  public void reset() {
+    evalLastPiece();
     currentCount = 0;
-    return ret;
+  }
+
+  public int getResult() {
+    return result;
+  }
+
+  public boolean isFinishedState() {
+    return (result == Integer.MAX_VALUE || result == Integer.MIN_VALUE);
   }
 }
