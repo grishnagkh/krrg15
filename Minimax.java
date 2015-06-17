@@ -15,7 +15,7 @@ public class Minimax implements ISolver{
         private final int lossSymbol = Integer.MIN_VALUE + 1;
         private boolean firstMove = true;
 
-        private Random random;
+        private Random random = new Random();
         private SeqFabian seq;
         
         private SeqVerena seqVerena;
@@ -92,7 +92,7 @@ public class Minimax implements ISolver{
                                 else if (utility == opponentID) return lossSymbol;
                                 else return -1000;
                         }
-                        else if (action == CutoffActions.cutoff) return evalVerena(s);
+                        else if (action == CutoffActions.cutoff) return evalMonteCarloVerena(s);
                 }
                 
                 int v = Integer.MIN_VALUE;
@@ -129,7 +129,7 @@ public class Minimax implements ISolver{
                                 else if (utility == opponentID) return lossSymbol;
                                 else return -1000  ;
                         }
-                        else if (action == CutoffActions.cutoff) return evalVerena(s);
+                        else if (action == CutoffActions.cutoff) return evalMonteCarloVerena(s);
                 }
 
                 int v = Integer.MAX_VALUE;
@@ -306,6 +306,31 @@ public class Minimax implements ISolver{
     }
 
     return ret;
+  }
+
+  private int evalMonteCarloVerena(State s) {
+    int randomCol;
+    int wins = 0;
+    int currentPlayer = opponentID;
+
+    for (int i = 0; i < runs; i++) {
+      currentPlayer = opponentID;
+      State clone = new State(s);
+
+      while (gameLogic.TerminalTest(clone) == 0) {
+        randomCol = random.nextInt(clone.openCols.size());
+        clone.insertCoin(clone.openCols.get(randomCol), currentPlayer);
+        currentPlayer = (currentPlayer == opponentID) ?  playerID : opponentID ;
+      }
+
+      if (gameLogic.TerminalTest(clone) == playerID) {
+        wins++;
+      } else if (gameLogic.TerminalTest(clone) == opponentID) {
+        wins--;
+      }
+    }
+
+    return wins;
   }
 
 
