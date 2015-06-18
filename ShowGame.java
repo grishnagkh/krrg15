@@ -10,10 +10,14 @@ public class ShowGame{
         GameLogic player2 = new GameLogic();
         
         player1.initializeGame(cols,rows,1);
-        player2.initializeGame(cols,rows,2);
-        
-        player1.setSolver(new Minimax(player1.getPlayerID(), player1.getOpponentID(), player1, 1));
-        player2.setSolver(new Minimax(player2.getPlayerID(), player2.getOpponentID(), player2, 4));
+        player2.initializeGame(cols,rows,-1);
+
+    
+		player1.setSolver(new Negamax(player1.getPlayerID(), player1, 3, new MCEval(player1)));    
+		player2.setSolver(new Negamax(player2.getPlayerID(), player2, 3, new PieceCounter(player2)));    
+
+//        player1.setSolver(new Minimax(player1.getPlayerID(), player1.getOpponentID(), player1, 1));
+  //      player2.setSolver(new Minimax(player2.getPlayerID(), player2.getOpponentID(), player2, 4));
 
         try{
             FourConnectGUI g = new FourConnectGUI(player1,player2,cols,rows);

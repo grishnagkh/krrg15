@@ -7,6 +7,8 @@
  */
 public class Negamax implements ISolver {
 
+	/* TODO if time: tables */
+
 	private int pid, oid, cutoff;
 	private GameLogic gameLogic;
 	private Evaluator e;
@@ -27,7 +29,6 @@ public class Negamax implements ISolver {
 	 */
 	@Override
 	public int getDecision(State s) {
-		System.out.println("wake up negamax!");
 
 		State child;
 		int chosenVal = Integer.MIN_VALUE, chosenMove = -1;
@@ -45,12 +46,7 @@ public class Negamax implements ISolver {
 
 	private int negamax(State s, int d, int color) {
 
-		System.out
-				.println("hello, this is negamax and i'll stay alive forever, and no one knows why");
-		System.out.println("currently i am at color " + color + " and depth "
-				+ d);
 		if (d == 0 || gameLogic.TerminalTest(s) != 0) {
-			System.out.println("I'll return " + (color * e.eval(s)) + " here");
 			return color * e.eval(s);
 		}
 		int act, best = Integer.MIN_VALUE;
