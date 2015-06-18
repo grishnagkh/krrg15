@@ -10,24 +10,30 @@ public class Minimax implements ISolver{
         private HashMap<State, Integer> transTbl = new HashMap<State, Integer>(100000);
         private static int hitCounter = 0, count = 0;
         private GameLogic gameLogic;
-    private Random random;
-    private SeqFabian seq;
-
-    public int runs = 100;
-
-    private enum CutoffActions {finalState, cutoff, playOn}
+        private enum CutoffActions {finalState, cutoff, playOn}
         private final int winSymbol = Integer.MAX_VALUE - 1;
         private final int lossSymbol = Integer.MIN_VALUE + 1;
         private boolean firstMove = true;
+
+        private Random random = new Random();
+        private SeqFabian seq;
+
+        private int quadLength;
+        private int excessRows;
+        private int excessCols;
+      
+        public int runs = 100;
         
         public Minimax(int playerID, int opponentID, GameLogic gameLogic, int d){
                 this.playerID = playerID;
                 this.opponentID = opponentID;
                 this.gameLogic = gameLogic;
-                seq = new SeqFabian();
+//                seq = new Seq(playerID, opponentID);
+                quadLength = Math.min(gameLogic.board.gameBoard.length, gameLogic.board.gameBoard[0].length);
+                excessRows = Math.max(0, gameLogic.board.gameBoard[0].length - gameLogic.board.gameBoard.length);
+                excessCols = Math.max(0, gameLogic.board.gameBoard.length - gameLogic.board.gameBoard[0].length);      
                 this.cutoffdepth = d;
                 this.transTblCutoffDepth = d;
-                this.random = new Random(System.currentTimeMillis());
         }
         
         public int getDecision(State s){
@@ -85,7 +91,7 @@ public class Minimax implements ISolver{
                                 else if (utility == opponentID) return lossSymbol;
                                 else return -1000;
                         }
-                        else if (action == CutoffActions.cutoff) return eval(s);
+                        else if (action == CutoffActions.cutoff) return evalVerena(s);
                 }
                 
                 int v = Integer.MIN_VALUE;
@@ -122,7 +128,7 @@ public class Minimax implements ISolver{
                                 else if (utility == opponentID) return lossSymbol;
                                 else return -1000  ;
                         }
-                        else if (action == CutoffActions.cutoff) return evalMonteCarloFabian(s);
+                        else if (action == CutoffActions.cutoff) return evalVerena(s);
                 }
 
                 int v = Integer.MAX_VALUE;
@@ -161,50 +167,114 @@ public class Minimax implements ISolver{
                 }
                 return CutoffActions.playOn;
         }
-        
-        private int eval(State s){
-          int eval = 0;
 
-          final int MAX = 1;
-          final int MIN = 2;
-          int countingForPlayer = 0;
-          int currentCount = 0;
+  private int evalVerena(State s){
 
-          int[][] gameBoard = s.gameBoard;
+    int[][] gameBoard = s.gameBoard;
+    int[][] gameBoardMirrored = mirror(s.gameBoard);
 
-          // horizontal (rows)
-          for (int i = 0; i < gameBoard.length; i++) {
-            for (int j = 0; j < gameBoard[0].length; j++) {
+    SeqVerena seqVerena = new SeqVerena(playerID, opponentID);
 
-              // max piece
-              if (gameBoard[i][j] == MAX) {
-                if (countingForPlayer == MAX) {
-                  currentCount++;
-                } else {
+    // vertical (columns)
+    for (int i = 0; i < gameBoard.length; i++) {
+      for (int j = 0; j < gameBoard[0].length; j++) {
+        seqVerena.evalPiece(gameBoard[i][j]);
+      }
+      seqVerena.reset();
+    }
+    seqVerena.reset();
 
-                  // reset currentCount, set countingForPlayer == MIN and add to eval
-                  if (currentCount > 1) {
-                    eval += currentCount;
-
-                    //
-                  }
-                  currentCount = 1;
-
-                  countingForPlayer = MIN;
-                }
-              }
-
-              // min piece
-              if (gameBoard[i][j] == MIN) {
-                if (countingForPlayer == MIN) {
-                  currentCount++;
-                }
-              }
-            }
-          }
-
-          return eval;
+    // horizontal (rows)
+    if (!seqVerena.isFinishedState()) {
+      for (int i = 0; i < gameBoard[0].length; i++) {
+        for (int j = 0; j < gameBoard.length; j++) {
+          seqVerena.evalPiece(gameBoard[j][i]);
         }
+        seqVerena.reset();
+      }
+      seqVerena.reset();
+    }
+
+    // diagonal (top left to bottom right)
+    diagonalEvalPiece(seqVerena, gameBoard);
+
+    // diagonal (bottom left to top right) - use mirrored gameboard
+    diagonalEvalPiece(seqVerena, gameBoardMirrored);
+
+    return seqVerena.getResult();
+  }
+
+  private void diagonalEvalPiece(SeqVerena seqVerena, int[][] gameBoard) {
+    int diagLength = 1;
+
+    if (!seqVerena.isFinishedState()) {
+
+      // iterate vertically / handle excessRows
+      for (int i = 0; i < quadLength + excessRows; i++) {
+        for (int j = 0; j < diagLength; j++) {
+          seqVerena.evalPiece(gameBoard[j][i - j]);
+        }
+        seqVerena.reset();
+
+        if (diagLength < quadLength) {
+          diagLength++;
+        }
+      }
+      seqVerena.reset();
+
+      // iterate horizontally / handle excessCols
+      diagLength = quadLength;
+      for (int i = 1; i < quadLength + excessCols; i++) {
+        for (int j = 0; j < diagLength; j++) {
+          seqVerena.evalPiece(gameBoard[j + i][quadLength - 1 - j]);
+        }
+        seqVerena.reset();
+
+        // last triangle where diagLength is reducing to 1
+        if (i >= gameBoard[0].length - quadLength) {
+          diagLength--;
+        }
+      }
+      seqVerena.reset();
+    }
+  }
+
+  private int[][] mirror(int[][] gameBoard) {
+    int[][] ret = new int[gameBoard.length][gameBoard[0].length];
+
+    for (int i = 0; i < gameBoard.length; i++) {
+      for (int j = 0; j < gameBoard[0].length; j++) {
+        ret[i][j] = gameBoard[gameBoard.length - 1 - i][j];
+      }
+    }
+
+    return ret;
+  }
+
+  private int evalMonteCarloVerena(State s) {
+    int randomCol;
+    int wins = 0;
+    int currentPlayer = opponentID;
+
+    for (int i = 0; i < runs; i++) {
+      currentPlayer = opponentID;
+      State clone = new State(s);
+
+      while (gameLogic.TerminalTest(clone) == 0) {
+        randomCol = random.nextInt(clone.openCols.size());
+        clone.insertCoin(clone.openCols.get(randomCol), currentPlayer);
+        currentPlayer = (currentPlayer == opponentID) ?  playerID : opponentID ;
+      }
+
+      if (gameLogic.TerminalTest(clone) == playerID) {
+        wins++;
+      } else if (gameLogic.TerminalTest(clone) == opponentID) {
+        wins--;
+      }
+    }
+
+    return wins;
+  }
 
 
     private int evalFabian(State s) {
