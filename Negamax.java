@@ -13,6 +13,8 @@ public class Negamax implements ISolver {
 	private GameLogic gameLogic;
 	private Evaluator e;
 
+	private boolean first = true;
+
 	public Negamax(int playerId, GameLogic gl, int depth, Evaluator e) {
 		/*
 		 * not: pid = -oid must hold, else the implementation of negamax does
@@ -29,6 +31,11 @@ public class Negamax implements ISolver {
 	 */
 	@Override
 	public int getDecision(State s) {
+
+		if(first){
+			first = false;
+			return s.gameBoard[0].length/2;
+		}
 
 		State child;
 		int chosenVal = Integer.MIN_VALUE, chosenMove = -1;
