@@ -1,3 +1,8 @@
+package at.connect4.eval;
+
+import at.connect4.game.GameLogic;
+import at.connect4.game.State;
+
 public class EvalMCVerena extends MCEval {
 
     public EvalMCVerena(GameLogic gl) {

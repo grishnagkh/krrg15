@@ -1,3 +1,9 @@
+package at.connect4.solver;
+
+import at.connect4.eval.Evaluator;
+import at.connect4.game.GameLogic;
+import at.connect4.game.State;
+
 /**
  *
  * simple negamax implementation without transposition tables

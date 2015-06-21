@@ -1,3 +1,8 @@
+package at.connect4.eval;
+
+import at.connect4.game.GameLogic;
+import at.connect4.game.State;
+
 import java.util.ArrayList;
 import java.util.List;
 

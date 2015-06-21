@@ -1,3 +1,8 @@
+package at.connect4.eval;
+
+import at.connect4.game.GameLogic;
+import at.connect4.game.State;
+
 import java.util.Random;
 
 public class MCEval implements Evaluator{
@@ -13,7 +18,7 @@ public class MCEval implements Evaluator{
 		random = new Random();
 		this.gl = gl;
 		pid = gl.getPlayerID();
-		oid = -pid; //Negamax only ;)
+		oid = -pid; //at.connect4.solver.Negamax only ;)
         turn = pid;
     }
 

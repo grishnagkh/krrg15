@@ -1,3 +1,8 @@
+package at.connect4.eval;
+
+import at.connect4.game.GameLogic;
+import at.connect4.game.State;
+
 public class EvalPCVerena extends PieceCounter {
 
     private int quadLength;

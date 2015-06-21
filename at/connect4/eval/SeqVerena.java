@@ -1,3 +1,5 @@
+package at.connect4.eval;
+
 public class SeqVerena {
   private int playerID;
   private int opponentID;
@@ -37,7 +39,7 @@ public class SeqVerena {
         }
       } else {
 
-        // add current count to eval, set countingForPlayer == opponentID and reset currentCount
+        // add current count to at.connect4.eval, set countingForPlayer == opponentID and reset currentCount
         if (currentCount > 1) {
           val = currentCount;
         }
@@ -58,7 +60,7 @@ public class SeqVerena {
         }
       } else {
 
-        // add current count to eval, set countingForPlayer == playerID and reset currentCount
+        // add current count to at.connect4.eval, set countingForPlayer == playerID and reset currentCount
         if (currentCount > 1) {
           val = -1 * currentCount;
         }
