@@ -31,6 +31,8 @@ public class Minimax implements ISolver {
 
         public int getDecision(State s){
 
+                s.getCurrentPlayer();
+
                 if (firstMove) {
                         firstMove = false;
                         return s.gameBoard.length / 2 ;

@@ -13,7 +13,7 @@ public class GameLogic{
 
         public void initializeGame(int cols, int rows, int playerID){
                 this.playerID = playerID;
-                opponentID = playerID == 1 ? 2 : 1;
+                opponentID = playerID * -1;
                 board = new State(cols, rows);
                 //minimax = new at.connect4.solver.Minimax(playerID, opponentID, this);
         }

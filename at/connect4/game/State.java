@@ -10,35 +10,57 @@ public class State implements Cloneable{
         public int lastRow;
         public int lastCol;
         public ArrayList<Integer> openCols;
-        
+
         public State(State s) {
 //              this.playerID = s.playerID;
                 this.lastCol = s.lastCol;
                 this.lastRow = s.lastRow;
-                
+
                 this.gameBoard = new int[s.gameBoard.length][s.gameBoard[0].length];
                 for (int col = 0; col < gameBoard.length; col++) {
                         for (int row = 0; row < gameBoard[0].length; row++) {
                                 this.gameBoard[col][row] = s.gameBoard[col][row];
-                        }       
+                        }
                 }
-                
+
                 this.openCols = new ArrayList<Integer>(s.openCols.size());
                 for (int i = 0; i < s.openCols.size(); i++) {
                         this.openCols.add(s.openCols.get(i));
                 }
         }
-        
+
         public State(int cols, int rows){
 //              this.playerID = playerID;
-                //this.opponentID = 
+                //this.opponentID =
                 this.gameBoard = new int[cols][rows];
                 this.openCols = new ArrayList<Integer>(cols);
                 for (int i = 0; i < cols; i++) {
                         this.openCols.add(i);
                 }
         }
-        
+
+    public int getCurrentPlayer() {
+        //Count pieces to evaluate player
+
+        //Player IDs are assumed to be 1 / -1!!! :)
+
+        int pieces = 0;
+
+        for (int[] col : gameBoard) {
+            int row = 0;
+            int field;
+            while (row < col.length && (field = col[row]) != 0) {
+                pieces += field;
+                row++;
+            }
+        }
+
+        System.out.println("Current player: " + (pieces == 1 ? -1 : 1));
+
+        //Possible results:     0 -> equal counts -> player 1;      1 -> player 1 has one more -> player 2
+        return pieces == 1 ? -1 : 1;
+    }
+
         public void insertCoin(int col, int playerID) {
                 int row;
                 for (row = 0; row < this.gameBoard[0].length; row++) {
@@ -53,18 +75,18 @@ public class State implements Cloneable{
                         this.openCols.remove((Integer)col);
                 }
         }
-        
+
         void printAll() {
                 for (int row = gameBoard[0].length - 1; row >= 0; row--) {
                         for (int col = 0; col < gameBoard.length; col++) {
                                 System.out.print(gameBoard[col][row]);
-                        }       
+                        }
                         System.out.println();
                 }
                 System.out.println("lastCol: " + lastCol + ", lastRow: " + lastRow);
 //              System.out.println("playerID: " + playerID);
         }
-        
+
         private static boolean hashTrace = false;
         public int hashCode() {
                 final int PRIME = 31;
@@ -77,7 +99,7 @@ public class State implements Cloneable{
                                 result1 = result1 * PRIME + row;
                                 result1 = result1 * PRIME + gameBoard[col][row];
                                 if (hashTrace)System.out.println(col + ", " + row + "," + gameBoard[col][row]);
-                        }       
+                        }
                 }
                 if (hashTrace)System.out.println("\nhalf 1: " + result1 + "\n");
                 int result2 = 1;
@@ -94,8 +116,8 @@ public class State implements Cloneable{
                 if (hashTrace)System.out.println("half 2: " + result2 + "\n");
 
                 totalResult = result1 + result2;
-                
-                
+
+
                 boolean oddNumberCols = gameBoard.length % 2 == 1 ? true : false;
                 if (oddNumberCols) {
                         int midCol = gameBoard.length / 2;
@@ -110,7 +132,7 @@ public class State implements Cloneable{
                         }
                         if (hashTrace)System.out.println("\nmiddle: " + result3 + "\n");
                 }
-                
+
                 if (hashTrace)System.out.println("total: " + totalResult);
                 return totalResult;
         }
@@ -125,7 +147,7 @@ public class State implements Cloneable{
                                 if (!equal) {
                                         break;
                                 }
-                        }       
+                        }
                         if (!equal) {
                                 break;
                         }

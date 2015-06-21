@@ -81,7 +81,7 @@ public class FourConnectGUI extends JComponent implements MouseListener
                 int player = gameBoard[c][r];
                 if(player == 0) // background
                     g.drawImage(background, 100+100*c, 100+100*r, this);
-                else if (player == 2) // red = player2
+                else if (player == player2.playerID) // red = player2
                     g.drawImage(redPion, 100+100*c, 100+100*r, this);
                 else // blue = player1
                     g.drawImage(bluePion, 100+100*c, 100+100*r, this);
@@ -103,9 +103,9 @@ public class FourConnectGUI extends JComponent implements MouseListener
         g.drawImage(corner_right_top, 100+100*cols, 0, this);
         g.drawImage(corner_right_bottom, 100+100*cols, rows*100+100, this);
                 
-        if (winner == 1)
+        if (winner == player1.playerID)
             g.drawImage(blueWon, cols*100/2-50, rows*100/2+25, this);
-        else if (winner == 2)
+        else if (winner == player2.playerID)
             g.drawImage(redWon, cols*100/2-50, rows*100/2+25, this);
     }
 
@@ -137,22 +137,22 @@ public class FourConnectGUI extends JComponent implements MouseListener
     public void mouseClicked(MouseEvent e){
         if (winner ==0){
             int col=-1;
-            if (playerTurn == 1){
+            if (playerTurn == player1.playerID){
                 if (player1==null){//human
                     col=humanSelectedColumn(e);
-                    if (updateBoard(col,1)){
-                        player2.insertCoin(col,1);
+                    if (updateBoard(col,player1.playerID)){
+                        player2.insertCoin(col,player1.playerID);
                         winner = player2.gameFinished();
-                        playerTurn = 2;
+                        playerTurn = player2.playerID;
                     }
                 }
                 else{//computer
                     col = player1.decideNextMove();
-                    if (updateBoard(col,1)){
-                        if (player2!=null) player2.insertCoin(col,1);
-                        player1.insertCoin(col,1);
+                    if (updateBoard(col,player1.playerID)){
+                        if (player2!=null) player2.insertCoin(col,player1.playerID);
+                        player1.insertCoin(col,player1.playerID);
                         winner = player1.gameFinished();
-                        playerTurn = 2;
+                        playerTurn = player2.playerID;
                     }
                     else{
                         JOptionPane.showMessageDialog(this, 
@@ -165,19 +165,19 @@ public class FourConnectGUI extends JComponent implements MouseListener
             else{
                 if (player2==null){//human
                     col=humanSelectedColumn(e);
-                    if (updateBoard(col,2)){
-                        player1.insertCoin(col,2);
+                    if (updateBoard(col,player2.playerID)){
+                        player1.insertCoin(col,player2.playerID);
                         winner = player1.gameFinished();
-                        playerTurn = 1;
+                        playerTurn = player1.playerID;
                     }
                 }
                 else{//computer
                     col = player2.decideNextMove();
-                    if (updateBoard(col,2)){
-                        if (player1!=null) player1.insertCoin(col,2);
-                        player2.insertCoin(col,2);
+                    if (updateBoard(col,player2.playerID)){
+                        if (player1!=null) player1.insertCoin(col,player2.playerID);
+                        player2.insertCoin(col,player2.playerID);
                         winner = player2.gameFinished();
-                        playerTurn = 1;
+                        playerTurn = player1.playerID;
                     }
                     else{
                         JOptionPane.showMessageDialog(this,
