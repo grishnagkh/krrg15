@@ -1,48 +1,50 @@
 package at.connect4.eval;
 
+import java.util.Random;
+
 import at.connect4.game.GameLogic;
 import at.connect4.game.State;
 
-import java.util.Random;
-
-public class MCEval implements Evaluator{
+public class MCEval implements Evaluator {
 
 	Random random;
 	GameLogic gl;
 	int runs = 50;
 
-	int pid, oid; //player id, opponent id
+	int pid, oid; // player id, opponent id
 	int turn; // indicating which player's turn it is
 
-	public MCEval(GameLogic gl){
+	public MCEval(GameLogic gl) {
 		random = new Random();
 		this.gl = gl;
 		pid = gl.getPlayerID();
-		oid = -pid; //at.connect4.solver.Negamax only ;)
-        turn = pid;
-    }
+		oid = -pid; // at.connect4.solver.Negamax only ;)
+		turn = pid;
+	}
 
-    @Override
-    public int eval(State s) {
-        int randomCol;
-        int wins = 0;
+	@Override
+	public int eval(State s) {
+		int randomCol;
+		int score = 0;
 
-        for (int i = 0; i < runs; i++) {
+		for (int i = 0; i < runs; i++) {
 
-            State clone = new State(s);
+			State clone = new State(s);
 
-            while (gl.TerminalTest(clone) == 0) {
-                randomCol = random.nextInt(clone.openCols.size());
-                clone.insertCoin(clone.openCols.get(randomCol), turn);
-                turn = (turn == pid) ? oid : pid;
-            }
+			while (gl.TerminalTest(clone) == 0) {
+				randomCol = random.nextInt(clone.openCols.size());
+				clone.insertCoin(clone.openCols.get(randomCol), turn);
+				turn = (turn == pid) ? oid : pid;
+			}
 
-            if (gl.TerminalTest(clone) == pid) {
-                wins++;
-            } else if (gl.TerminalTest(clone) == oid) {
-                wins--;
-            }
-        }
-		return wins;
+			if (gl.TerminalTest(clone) == pid) {
+				score += 2;
+			} else if (gl.TerminalTest(clone) == oid) {
+				// loss;
+			} else {
+				score++;
+			}
+		}
+		return score;
 	}
 }
