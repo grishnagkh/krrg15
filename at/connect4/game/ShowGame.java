@@ -7,11 +7,11 @@ import javax.swing.JFrame;
 public class ShowGame {
 
 	public static void main(String[] arg) {
-		int cols = 7;// 7;
-		int rows = 6;// 6;
+		final int cols = 7;// 7;
+		final int rows = 6;// 6;
 
-		GameLogic player1 = new GameLogic();
-		GameLogic player2 = new GameLogic();
+		final GameLogic player1 = new GameLogic();
+		final GameLogic player2 = new GameLogic();
 
 		player1.initializeGame(cols, rows, 1);
 		player2.initializeGame(cols, rows, -1);

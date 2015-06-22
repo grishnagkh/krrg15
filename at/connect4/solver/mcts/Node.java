@@ -24,6 +24,7 @@ public class Node implements Node_I {
 
     private ArrayList<Integer> untriedActions;
     private int visits;
+    private double value;
 
     public Node(State state, GameLogic logic) {
         this.state = state;
@@ -99,11 +100,11 @@ public class Node implements Node_I {
     }
 
     public double getValue() {
-        throw new RuntimeException("to be implemented!");
+        return value;
     }
 
     public void setValue(double value) {
-        throw new RuntimeException("to be implemented!");
+        this.value = value;
     }
 
     public int getVisits() {
@@ -111,15 +112,21 @@ public class Node implements Node_I {
     }
 
     public void setVisits(int num) {
-        throw new RuntimeException("to be implemented!");
+        this.visits = num;
     }
 
     public double getReward(double outcome) {
-        throw new RuntimeException("to be implemented!");
+        return (int) outcome == logic.playerID ? 1 : 0;
     }
 
     public double getOutcome() {
-        throw new RuntimeException("to be implemented!");
+        int outcome = logic.TerminalTest(state);
+        //Draw is neutral
+        if (outcome == 3) {
+            return 0;
+        }
+
+        return outcome;
     }
 
 }
