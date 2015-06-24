@@ -31,8 +31,10 @@ public class Node implements Node_I {
         this.logic = logic;
 
         this.untriedActions = new ArrayList<>(state.openCols);
+        this.children = new ArrayList<>(7);
 
         this.visits = 0;
+        this.value = 0;
     }
 
     public void setParent(Node_I n) {
@@ -74,8 +76,6 @@ public class Node implements Node_I {
             child.setParent(this);
             child.setAction(action);
 
-            untriedActions.remove(action);
-
             return child;
         } catch (ClassCastException cce) {
             System.out.println("Action provided to create a child node is no Integer: " + action);
@@ -85,6 +85,7 @@ public class Node implements Node_I {
 
     public void setChild(Node_I child) {
         children.add(child);
+        untriedActions.remove(child.getAction());
     }
 
     public ArrayList<Object> getUntriedActions() {
@@ -117,6 +118,7 @@ public class Node implements Node_I {
 
     public double getReward(double outcome) {
         return (int) outcome == logic.playerID ? 1 : 0;
+        //return (int) outcome * logic.playerID; //Negative value for losses (otherwise a loss is as good as a draw)
     }
 
     public double getOutcome() {

@@ -1,8 +1,9 @@
 package at.connect4.game;
 
-import java.awt.EventQueue;
+import at.connect4.solver.mcts.Uct4connect;
 
-import javax.swing.JFrame;
+import javax.swing.*;
+import java.awt.*;
 
 public class ShowGame {
 
@@ -16,15 +17,18 @@ public class ShowGame {
 		player1.initializeGame(cols, rows, 1);
 		player2.initializeGame(cols, rows, -1);
 
-		player1.setSolver(new at.connect4.solver.Negamax(player1.getPlayerID(),
+		/*player1.setSolver(new at.connect4.solver.Negamax(player1.getPlayerID(),
 				player1, 3, new at.connect4.eval.PieceCounter(player1)));
 		player2.setSolver(new at.connect4.solver.Negamax(player2.getPlayerID(),
-				player2, 4, new at.connect4.eval.PieceCounter(player2)));
+				player2, 4, new at.connect4.eval.PieceCounter(player2)));*/
 
 		// player1.setSolver(new Minimax(player1.getPlayerID(),
 		// player1.getOpponentID(), player1, 2, new MCEval(player1)));
 		// player2.setSolver(new Minimax(player2.getPlayerID(),
 		// player2.getOpponentID(), player2, 3, new MCEval(player2)));
+
+        player1.setSolver(new Uct4connect(player1.playerID, player1.opponentID, player1, 1));
+        player2.setSolver(new Uct4connect(player2.playerID, player2.opponentID, player2, 1));
 
 		EventQueue.invokeLater(new Runnable() {
 

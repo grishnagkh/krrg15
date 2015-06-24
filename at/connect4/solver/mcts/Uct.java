@@ -56,7 +56,7 @@ public class Uct implements Mcts_I{
         
         return this.getBestChild(n, 0);
     }
-    
+
     @Override
     public Node_I walk(Node_I n){
         while(!n.isTerminal()){
@@ -67,7 +67,7 @@ public class Uct implements Mcts_I{
                 n = this.getBestChild(n, this.epsilon);
             }
         }
-        
+
         return n;
     }
     
@@ -104,7 +104,7 @@ public class Uct implements Mcts_I{
     @Override
     public Node_I getBestChild(Node_I n, double c){
         Node_I best = null;
-        double bestVal = Double.MIN_VALUE;
+        double bestVal = Double.NEGATIVE_INFINITY; //Double.MIN_VALUE > 0 !!!
         double curVal;
         
         for(Node_I x : n.getChildren()){

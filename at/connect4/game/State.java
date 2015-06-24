@@ -55,8 +55,6 @@ public class State implements Cloneable{
             }
         }
 
-        System.out.println("Current player: " + (pieces == 1 ? -1 : 1));
-
         //Possible results:     0 -> equal counts -> player 1;      1 -> player 1 has one more -> player 2
         return pieces == 1 ? -1 : 1;
     }
