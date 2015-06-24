@@ -2,8 +2,9 @@ package at.connect4.game;
 
 import at.connect4.solver.mcts.Uct4connect;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.EventQueue;
+
+import javax.swing.JFrame;
 
 public class ShowGame {
 

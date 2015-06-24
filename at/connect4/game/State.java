@@ -13,6 +13,9 @@ public class State implements Cloneable{
 
         public State(State s) {
 //              this.playerID = s.playerID;
+
+			this.lastInsert = s.lastInsert;
+
                 this.lastCol = s.lastCol;
                 this.lastRow = s.lastRow;
 
@@ -59,7 +62,14 @@ public class State implements Cloneable{
         return pieces == 1 ? -1 : 1;
     }
 
+		public int lastInsert;
+		public int getLastPlayer(){
+			return lastInsert;
+		}
+
         public void insertCoin(int col, int playerID) {
+				lastInsert = playerID;		
+
                 int row;
                 for (row = 0; row < this.gameBoard[0].length; row++) {
                         if (this.gameBoard[col][row] == 0) {
@@ -74,7 +84,7 @@ public class State implements Cloneable{
                 }
         }
 
-        void printAll() {
+        public void printAll() {
                 for (int row = gameBoard[0].length - 1; row >= 0; row--) {
                         for (int col = 0; col < gameBoard.length; col++) {
                                 System.out.print(gameBoard[col][row]);
