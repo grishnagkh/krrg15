@@ -59,9 +59,11 @@ public class PieceCounter implements Evaluator {
 	@Override
 	public int eval(State s) {
 
-		pid = s.getCurrentPlayer();
-		oid = -pid;// NEGAMAX
+		oid = s.getLastPlayer();
+		pid = -oid;// NEGAMAX
 
+			/*TODO: move terminal test upwards */
+/*
 		int tt = gl.TerminalTest(s);
 		System.out.println("terminal? " + tt);
 		if (tt == pid)
@@ -70,16 +72,19 @@ public class PieceCounter implements Evaluator {
 			return Integer.MIN_VALUE;
 		if (tt == 3)
 			return 0; // DRAW
+*/
+
+		//debug: print board
 
 		int colSum, rowSum, diagSum;
 
 		colSum = evalCols(s.gameBoard); // debugged.. should work
-		System.out.println("colSum: " + colSum);
-		rowSum = evalRows(s.gameBoard); // debugging atm
-		System.out.println("rowSum: " + rowSum);
+//System.out.println("colSum: " + colSum);
+		rowSum = evalRows(s.gameBoard); // debugging.. should work...
+//System.out.println("rowSum: " + rowSum);
 		diagSum = evalDiag(s.gameBoard, false);
 		diagSum += evalDiag(s.gameBoard, true);
-		System.out.println("diagSum: " + diagSum);
+//System.out.println("diagSum: " + diagSum);
 
 		return colSum + rowSum + diagSum;
 	}
@@ -126,7 +131,7 @@ public class PieceCounter implements Evaluator {
 	}
 
 	public int evalDiag(int[][] board, boolean mirrored) {
-		System.out.println("eval diag start (mirrored = " + mirrored + ")");
+//		System.out.println("eval diag start (mirrored = " + mirrored + ")");
 		if (mirrored) {
 			board = mirror(board);
 		}
@@ -178,7 +183,7 @@ public class PieceCounter implements Evaluator {
 					cnt++;
 				}
 
-				System.out.println(cnt + " in a row (right) for player " + p);
+//				System.out.println(cnt + " in a row (right) for player " + p);
 
 				p = (p == pid) ? 0 : 1;
 
@@ -212,7 +217,7 @@ public class PieceCounter implements Evaluator {
 					cnt++;
 				}
 
-				System.out.println(cnt + " in a row (left) for player " + p);
+//				System.out.println(cnt + " in a row (left) for player " + p);
 
 				p = (p == pid) ? 0 : 1;
 

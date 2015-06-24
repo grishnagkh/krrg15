@@ -17,9 +17,11 @@ public class ShowGame {
 		player2.initializeGame(cols, rows, -1);
 
 		player1.setSolver(new at.connect4.solver.Negamax(player1.getPlayerID(),
-				player1, 3, new at.connect4.eval.PieceCounter(player1)));
+				player1, 4, new at.connect4.eval.PieceCounter(player1)));
+		//player2.setSolver(new at.connect4.solver.Negamax(player2.getPlayerID(),
+		//		player2, 4, new at.connect4.eval.PieceCounter(player2)));
 		player2.setSolver(new at.connect4.solver.Negamax(player2.getPlayerID(),
-				player2, 4, new at.connect4.eval.PieceCounter(player2)));
+				player2, 4, new at.connect4.eval.MCEval(player2)));
 
 		// player1.setSolver(new Minimax(player1.getPlayerID(),
 		// player1.getOpponentID(), player1, 2, new MCEval(player1)));
