@@ -117,8 +117,8 @@ public class Node implements Node_I {
     }
 
     public double getReward(double outcome) {
-        return (int) outcome == logic.playerID ? 1 : 0;
-        //return (int) outcome * logic.playerID; //Negative value for losses (otherwise a loss is as good as a draw)
+        //return (int) outcome == logic.playerID ? 1 : 0;
+        return (int) outcome * logic.playerID; //Negative value for losses (otherwise a loss is as good as a draw)
     }
 
     public double getOutcome() {

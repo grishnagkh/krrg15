@@ -54,7 +54,7 @@ public class Uct implements Mcts_I{
             secs = (end-start)/1000;
         }
         
-        return this.getBestChild(n, 0);
+        return this.getBestChild(n, 1);
     }
 
     @Override

@@ -30,6 +30,7 @@ public class Uct4connect extends Uct implements ISolver {
     public int getDecision(State s){
         Node n = new Node(s,this.logic);
         Node x = (Node) super.search(n);
+        System.out.println(x.getAction());
         return (Integer) x.getAction();
     }
 }
