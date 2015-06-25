@@ -1,0 +1,17 @@
+piece counter (3) VS piece counter (3):-1
+piece counter (3) VS piece counter (4):-1
+piece counter (3) VS piece counter (5):-1
+piece counter (3) VS piece counter (6):-1
+piece counter (4) VS piece counter (3):1
+piece counter (4) VS piece counter (4):1
+piece counter (4) VS piece counter (5):-1
+piece counter (4) VS piece counter (6):-1
+piece counter (5) VS piece counter (3):3
+piece counter (5) VS piece counter (4):3
+piece counter (5) VS piece counter (5):1
+piece counter (5) VS piece counter (6):-1
+piece counter (6) VS piece counter (3):3
+piece counter (6) VS piece counter (4):-1
+piece counter (6) VS piece counter (5):3
+piece counter (6) VS piece counter (6):-1
+

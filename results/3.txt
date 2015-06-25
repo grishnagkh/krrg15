@@ -1,0 +1,101 @@
+piece counter (3) VS piece counter (3):-1
+piece counter (3) VS piece counter (4):-1
+piece counter (3) VS piece counter (5):-1
+piece counter (3) VS piece counter (6):-1
+piece counter (4) VS piece counter (3):1
+piece counter (4) VS piece counter (4):1
+piece counter (4) VS piece counter (5):-1
+piece counter (4) VS piece counter (6):-1
+piece counter (5) VS piece counter (3):3
+piece counter (5) VS piece counter (4):3
+piece counter (5) VS piece counter (5):1
+piece counter (5) VS piece counter (6):-1
+piece counter (6) VS piece counter (3):3
+piece counter (6) VS piece counter (4):-1
+piece counter (6) VS piece counter (5):3
+piece counter (6) VS piece counter (6):-1
+mceval (3, nruns 100) VS mceval (3, nruns 100):-1
+mceval (3, nruns 100) VS mceval (4, nruns 100):-1
+mceval (4, nruns 100) VS mceval (3, nruns 100):-1
+mceval (4, nruns 100) VS mceval (4, nruns 100):-1
+mceval (3, nruns 100) VS mceval (3, nruns 150):-1
+mceval (3, nruns 100) VS mceval (4, nruns 150):-1
+mceval (4, nruns 100) VS mceval (3, nruns 150):-1
+mceval (4, nruns 100) VS mceval (4, nruns 150):-1
+mceval (3, nruns 100) VS mceval (3, nruns 200):-1
+mceval (3, nruns 100) VS mceval (4, nruns 200):-1
+mceval (4, nruns 100) VS mceval (3, nruns 200):-1
+mceval (4, nruns 100) VS mceval (4, nruns 200):-1
+mceval (3, nruns 150) VS mceval (3, nruns 100):-1
+mceval (3, nruns 150) VS mceval (4, nruns 100):-1
+mceval (4, nruns 150) VS mceval (3, nruns 100):-1
+mceval (4, nruns 150) VS mceval (4, nruns 100):-1
+mceval (3, nruns 150) VS mceval (3, nruns 150):-1
+mceval (3, nruns 150) VS mceval (4, nruns 150):-1
+mceval (4, nruns 150) VS mceval (3, nruns 150):-1
+mceval (4, nruns 150) VS mceval (4, nruns 150):-1
+mceval (3, nruns 150) VS mceval (3, nruns 200):-1
+mceval (3, nruns 150) VS mceval (4, nruns 200):-1
+mceval (4, nruns 150) VS mceval (3, nruns 200):-1
+mceval (4, nruns 150) VS mceval (4, nruns 200):-1
+mceval (3, nruns 200) VS mceval (3, nruns 100):-1
+mceval (3, nruns 200) VS mceval (4, nruns 100):-1
+mceval (4, nruns 200) VS mceval (3, nruns 100):3
+mceval (4, nruns 200) VS mceval (4, nruns 100):-1
+mceval (3, nruns 200) VS mceval (3, nruns 150):-1
+mceval (3, nruns 200) VS mceval (4, nruns 150):-1
+mceval (4, nruns 200) VS mceval (3, nruns 150):-1
+mceval (4, nruns 200) VS mceval (4, nruns 150):-1
+mceval (3, nruns 200) VS mceval (3, nruns 200):-1
+mceval (3, nruns 200) VS mceval (4, nruns 200):-1
+mceval (4, nruns 200) VS mceval (3, nruns 200):-1
+mceval (4, nruns 200) VS mceval (4, nruns 200):-1
+mceval (3 nruns 100) VS piece counter (3):-1
+piece counter (3) VS mc eval (3 nruns 100):-1
+mceval (3 nruns 100) VS piece counter (4):-1
+piece counter (4) VS mc eval (3 nruns 100):-1
+mceval (3 nruns 100) VS piece counter (5):-1
+piece counter (5) VS mc eval (3 nruns 100):-1
+mceval (3 nruns 100) VS piece counter (6):-1
+piece counter (6) VS mc eval (3 nruns 100):-1
+mceval (4 nruns 100) VS piece counter (3):-1
+piece counter (3) VS mc eval (4 nruns 100):-1
+mceval (4 nruns 100) VS piece counter (4):-1
+piece counter (4) VS mc eval (4 nruns 100):-1
+mceval (4 nruns 100) VS piece counter (5):-1
+piece counter (5) VS mc eval (4 nruns 100):-1
+mceval (4 nruns 100) VS piece counter (6):-1
+piece counter (6) VS mc eval (4 nruns 100):-1
+mceval (3 nruns 150) VS piece counter (3):-1
+piece counter (3) VS mc eval (3 nruns 150):-1
+mceval (3 nruns 150) VS piece counter (4):-1
+piece counter (4) VS mc eval (3 nruns 150):-1
+mceval (3 nruns 150) VS piece counter (5):-1
+piece counter (5) VS mc eval (3 nruns 150):1
+mceval (3 nruns 150) VS piece counter (6):-1
+piece counter (6) VS mc eval (3 nruns 150):-1
+mceval (4 nruns 150) VS piece counter (3):-1
+piece counter (3) VS mc eval (4 nruns 150):-1
+mceval (4 nruns 150) VS piece counter (4):-1
+piece counter (4) VS mc eval (4 nruns 150):-1
+mceval (4 nruns 150) VS piece counter (5):-1
+piece counter (5) VS mc eval (4 nruns 150):-1
+mceval (4 nruns 150) VS piece counter (6):-1
+piece counter (6) VS mc eval (4 nruns 150):-1
+mceval (3 nruns 200) VS piece counter (3):-1
+piece counter (3) VS mc eval (3 nruns 200):-1
+mceval (3 nruns 200) VS piece counter (4):-1
+piece counter (4) VS mc eval (3 nruns 200):-1
+mceval (3 nruns 200) VS piece counter (5):-1
+piece counter (5) VS mc eval (3 nruns 200):-1
+mceval (3 nruns 200) VS piece counter (6):-1
+piece counter (6) VS mc eval (3 nruns 200):-1
+mceval (4 nruns 200) VS piece counter (3):-1
+piece counter (3) VS mc eval (4 nruns 200):-1
+mceval (4 nruns 200) VS piece counter (4):-1
+piece counter (4) VS mc eval (4 nruns 200):-1
+mceval (4 nruns 200) VS piece counter (5):-1
+piece counter (5) VS mc eval (4 nruns 200):-1
+mceval (4 nruns 200) VS piece counter (6):-1
+piece counter (6) VS mc eval (4 nruns 200):-1
+
