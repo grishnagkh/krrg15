@@ -44,7 +44,10 @@ public class GameLogic{
         // at.connect4.solver.Minimax + evaluation function
         public int decideNextMove() {
                 //return minimax.getDecision(board);
-            return this.solver.getDecision(board);
+			long l = System.currentTimeMillis();
+			int move = this.solver.getDecision(board);
+			System.out.println("The solver took " + (System.currentTimeMillis() - l ) + "ms to decide for the next move");
+            return move; 
         }
         
         public int TerminalTest(State s){

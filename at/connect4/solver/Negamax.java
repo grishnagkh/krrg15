@@ -54,19 +54,19 @@ public class Negamax implements ISolver {
 
 			int negaVal = negamax(child, cutoff, child.getLastPlayer());
 			int minimaxVal = -negaVal;
-			System.out.println("negamax value: " + negaVal );
-			System.out.println("minimax value: " + minimaxVal );
+			//System.out.println("negamax value: " + negaVal );
+			//System.out.println("minimax value: " + minimaxVal );
 			if(max < minimaxVal){
 				chosenMove = move;
 				max = minimaxVal;
 			}
 		}
-		System.out.println("chosen move: " + chosenMove  +"\n ################ ");
+		//System.out.println("chosen move: " + chosenMove  +"\n ################ ");
 		if(+WIN == max){
-			javax.swing.JOptionPane.showMessageDialog(null, "we'll win! " + -s.getLastPlayer() );
+		//	javax.swing.JOptionPane.showMessageDialog(null, "we'll win! " + -s.getLastPlayer() );
 		}
 		if(-WIN == max){
-			javax.swing.JOptionPane.showMessageDialog(null, "we'll loose! " + -s.getLastPlayer() );
+			//javax.swing.JOptionPane.showMessageDialog(null, "we'll loose! " + -s.getLastPlayer() );
 		}
 		return chosenMove;
 	}
@@ -75,10 +75,10 @@ public class Negamax implements ISolver {
 		int tt = 0;
 		if((tt=gameLogic.TerminalTest(s)) != 0) {
 			if(tt == color){
-	System.out.println("WIN!");
+	//System.out.println("WIN!");
 				return -WIN;
 			}else if(tt == -color){
-	System.out.println("LOSS!");
+	//System.out.println("LOSS!");
 				return WIN ; //LOSS;
 			}else if(tt == 3){
 	System.out.println("DRAW!");

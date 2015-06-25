@@ -22,6 +22,10 @@ public class MCEval implements Evaluator {
 		turn = pid;
 	}
 
+	public void setRuns(int n){
+		runs = n;
+	}
+
 	@Override
 	public int eval(State s) {
 		int randomCol;
