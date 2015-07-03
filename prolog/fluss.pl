@@ -1,7 +1,7 @@
 
 can( move( Block, From, To), [ isAt( Block, From), pawnAt(From), isAt(wolf, W), isAt(goat,G), isAt(cabbage, C)] ) :-  
 	is_block( Block), place( To), place( From), From \== To,
-	( W = To ; C = To ; G = To ; Block = goat). %drecks zeile hat 3 stunden gedauert
+	( W = To ; C = To ; G = To ; Block = goat).
 
 %move the pawn alone...
 can( move(pawn, From, To),[pawnAt(From), isAt(wolf, To), isAt(cabbage, To), isAt(goat, From )] ):- place(From), place(To), From \= To.
